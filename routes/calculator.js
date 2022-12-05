@@ -5,11 +5,13 @@ function round(value) {
     return Math.round(value * 100) / 100;
 }
 
+const maxDelay = 3000;
+
 router.get('/', function(req, res) {
     res.send("yeah");
 });
 
-router.post('/calculate', function(req, res) {
+router.post('/calculate', async function(req, res) {
     console.log(req.body);
 
     let loan = req.body.loan;
@@ -44,6 +46,8 @@ router.post('/calculate', function(req, res) {
     }
     console.log(number);
     
+    await new Promise(r => setTimeout(r, Math.random() * maxDelay));
+
     res.json(
         JSON.stringify({
             monthPayment: round(monthPayment),
