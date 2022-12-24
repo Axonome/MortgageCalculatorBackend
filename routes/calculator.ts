@@ -1,17 +1,25 @@
 var express = require("express");
 var router = express.Router();
 
-function round(value) {
+type Payments = Array<Record<string, number>>;
+
+interface MortgageCalculationResultsData {
+    monthPayment: number,
+    overpayment: number,
+    payments: Payments,
+}
+
+function round(value: number): number {
     return Math.round(value * 100) / 100;
 }
 
 const maxDelay = 3000;
 
-router.get('/', function(req, res) {
+router.get('/', function(req: any, res: any) {
     res.send("yeah");
 });
 
-router.post('/calculate', async function(req, res) {
+router.post('/calculate', async function(req: any, res: any) {
     console.log(req.body);
 
     let loan = req.body.loan;
@@ -22,7 +30,7 @@ router.post('/calculate', async function(req, res) {
     let monthPayment = loan * monthInterest * totalInterest / (totalInterest - 1);
     let overpayment = monthPayment * months - loan;
 
-    let payments = []
+    let payments: Payments = [];
 
     let number = 0;
     while (loan > 0) {
@@ -38,7 +46,7 @@ router.post('/calculate', async function(req, res) {
             total: total,
             interest: interest,
             debt: debt,
-            date: date,
+            date: date.getTime(),
             loan: round(loan)
         });
 
@@ -48,13 +56,13 @@ router.post('/calculate', async function(req, res) {
     
     await new Promise(r => setTimeout(r, Math.random() * maxDelay));
 
-    res.json(
-        JSON.stringify({
-            monthPayment: round(monthPayment),
-            overpayment: round(overpayment),
-            payments: payments
-        })
-    );
+    let result: MortgageCalculationResultsData = {
+        monthPayment: round(monthPayment),
+        overpayment: round(overpayment),
+        payments: payments
+    };
+
+    res.json(JSON.stringify(result));
 });
 
 module.exports = router;
