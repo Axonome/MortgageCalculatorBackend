@@ -5,10 +5,10 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var testAPIRouter = require("./routes/testApi")
-var calculatorRouter = require("./routes/calculator");
+var indexRouter = require('./routes/index.ts');
+var usersRouter = require('./routes/users.ts');
+var testAPIRouter = require("./routes/testApi.ts")
+var calculatorRouter = require("./routes/calculator.ts");
 
 var app = express();
 
@@ -29,12 +29,12 @@ app.use("/testApi", testAPIRouter);
 app.use("/calculator", calculatorRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function(req: any, res: any, next: any) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function(err: any, req: any, res: any, next: any) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
